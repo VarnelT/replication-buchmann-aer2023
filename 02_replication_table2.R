@@ -1,9 +1,13 @@
 library(tidyverse)
-library(fixest) # Le standard pour l'économétrie en R
+library(fixest) 
 library(glue)
+library(modelsummary) 
 library(haven)
 library(gt) 
-install.packages("gt")
+
+
+
+
 setwd('/home/onyxia/work/replication-buchmann-aer2023')
 
 
@@ -113,54 +117,108 @@ gtsave(table_output, "Table1_SummaryStatistics_Replication.html")
 
 
 
+#--------------------------------------------------------------------------------
+       ### TABLE2 / MARRIAGE OUTCOMES ###
+#---------------------------------------------------------------------------------
 
+# --- DÉFINITION DES VARIABLES ---
+# Outcome : under_18 (Mariée avant 18 ans)
+# Traitements : anyoil (Incentive), anyemp (Empowerment), oil_kk (Interaction)
+# Fixed Effects : unionID (Strate admin) + third (Tercile de taille village)
+# Cluster : CLUSTER (Village)
 
+# Contrôles (Liste exacte du papier) :
+# - older_sister (A une grande soeur non mariée)
+# - bl_still_in_school (Scolarisée à la baseline)
+# - bl_education_mother (Education de la mère)
+# - bl_HHsize (Taille du ménage)
+# - bl_public_transit (Accès transport public)
+# - bl_age_reported (Age dummies pour contrôler l'âge exact)
 
+# --- 3. ESTIMATION ---
 
+# Modèle 1 : Échantillon Complet (15-17 ans)
+model_1 <- feols(under_18 ~ anyemp + anyoil + oil_kk + 
+                   older_sister + bl_still_in_school + bl_education_mother + 
+                   bl_HHsize + bl_public_transit + i(bl_age_reported) | 
+                   unionID + third, 
+                 cluster = ~CLUSTER,
+                 data = df)
 
+# Modèle 2 : Sous-échantillon (Age 15)
+# Note: bl_age_reported = 14 correspond à 15 ans au début du programme
+df_15 <- df %>% filter(bl_age_reported == 14)
+model_2 <- feols(under_18 ~ anyemp + anyoil + oil_kk + 
+                   older_sister + bl_still_in_school + bl_education_mother + 
+                   bl_HHsize + bl_public_transit | 
+                   unionID + third, 
+                 cluster = ~CLUSTER,
+                 data = df_15)
 
+# --- 3. CALCUL DE LA "CONTROL MEAN" ---
+# Le papier affiche la moyenne du groupe de contrôle en bas du tableau.
+# On doit la calculer manuellement pour l'ajouter.
 
+# Moyenne Control pour Col 1
+mean_ctrl_1 <- df %>% 
+  filter(anyoil == 0 & anyemp == 0 & oil_kk == 0) %>% # Groupe Control pur
+  summarise(m = mean(under_18, na.rm=TRUE)) %>% pull()
 
+# Moyenne Control pour Col 2 (Age 15)
+mean_ctrl_2 <- df_15 %>% 
+  filter(anyoil == 0 & anyemp == 0 & oil_kk == 0) %>% 
+  summarise(m = mean(under_18, na.rm=TRUE)) %>% pull()
 
+# On crée un petit dataframe pour injecter ces lignes
+rows <- data.frame(
+  term = c("Control Mean", "FE: Union"),
+  "Col1" = c(sprintf("%.3f", mean_ctrl_1), "Yes"), # Format 3 décimales
+  "Col2" = c(sprintf("%.3f", mean_ctrl_2), "Yes")
+)
 
-# 2. Vérification des variables de contrôle
-# Le papier contrôle pour : age, household size, older sister, school enrollment, mother education, public transport.
-# On vérifie si elles sont présentes (noms standards dans ce dataset)
-controls_candidates <- c("older_sister", "bl_still_in_school", "bl_education_mother", 
-                         "bl_HHsize", "bl_public_transit")
-has_controls <- all(controls_candidates %in% names(df))
+# --- 4. CONFIGURATION DU TABLEAU ---
 
-# 3. Création de la formule
-# On commence par le modèle sans contrôles (juste FE) pour voir si on "touche" la cible.
-# Note : 'oil_kk' est l'interaction déjà créée dans le dataset Stata
-fml_base <- under_18 ~ anyoil + anyemp + oil_kk | unionID + third
+# Dictionnaire pour renommer les variables comme dans l'article
+coef_map <- c(
+  "anyemp" = "Empowerment",
+  "anyoil" = "Incentive",
+  "oil_kk" = "Incen.*Empow."
+)
 
-if (has_controls) {
-  # Si les contrôles sont là, on les ajoute (Modèle complet Table 2)
-  # On ajoute aussi les dummies d'âge (bl_age_reported est souvent traité comme facteur)
-  fml_full <- as.formula(
-    paste("under_18 ~ anyoil + anyemp + oil_kk +", 
-          paste(controls_candidates, collapse = " + "), 
-          "+ i(bl_age_reported) | unionID + third")
-  )
-  print("✅ Variables de contrôle trouvées. On lance le modèle COMPLET.")
-} else {
-  fml_full <- fml_base
-  print("⚠️ Variables de contrôle absentes. On lance le modèle SIMPLE (FE uniquement).")
-}
+# Création du tableau avec modelsummary
+table_gt <- modelsummary(
+  list("Age 15-17" = model_1, "Age 15" = model_2),
+  coef_map = coef_map,
+  stars = c('*' = .1, '**' = .05, '***' = .01),
+  gof_map = c("nobs", "r.squared"), # On garde N et R2
+  add_rows = rows, # On ajoute notre ligne Control Mean
+  output = "gt" # On veut un objet gt pour le styliser après
+) %>%
+  # --- 5. STYLISATION GT (COSMÉTIQUE) ---
+  tab_header(
+    title = "Table 2: Marriage outcomes, women unmarried at program start"
+  ) %>%
+  tab_spanner(
+    label = "Married < 18",
+    columns = c("Age 15-17", "Age 15")
+  ) %>%
+  # Mise en forme des chiffres (3 décimales pour coefs et SE)
+  fmt_number(
+    columns = 2:3,
+    decimals = 3
+  ) %>%
+  # Ajout des parenthèses autour des Standard Errors (classique en éco)
+  # modelsummary le fait souvent par défaut, mais on s'assure du look
+  tab_style(
+    style = cell_text(align = "center"),
+    locations = cells_body()
+  ) %>%
+  tab_source_note("Notes: Standard errors clustered at the village level in parentheses. Replication of Buchmann et al. (2023).")
 
-# 4. Estimation (Clustering au niveau CLUSTER)
-# C'est ici que la magie opère
-model_did <- feols(fml_full, data = df, cluster = ~CLUSTER)
+# --- 6. EXPORTATION ROBUSTE ---
 
-# 5. Affichage des résultats (Format Table 2)
-etable(model_did, 
-       fitstat = c("n", "r2"), 
-       signif.code = c("***"=0.01, "**"=0.05, "*"=0.10),
-       headers = "Table 2: Replication")
+# Affichage console
+print(table_gt)
 
-# 6. Comparaison avec la cible (Table 2 du papier)
-cat("\n--- VERDICT (CIBLES PAPIER) ---\n")
-cat("Incentive (anyoil) : Cible -0.049***\n")
-cat("Empowerment (anyemp) : Cible -0.007\n")
-cat("Interaction (oil_kk) : Cible 0.019\n")
+# Sauvegarde HTML (Sécurité)
+gtsave(table_gt, "Table2_Replication.html")
