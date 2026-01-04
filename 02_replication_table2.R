@@ -109,7 +109,7 @@ table_output <- final_tab_ordered %>%
 
 # Affichage
 print(table_output)
-gtsave(table_output, "Table1_SummaryStatistics_Replication.png")
+gtsave(table_output, "Table1_SummaryStatistics_Replication.html")
 
 
 
