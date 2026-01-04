@@ -36,4 +36,4 @@ df <- df %>% filter(before_miss == 0)
 cat("Après filtre 'Mariage pré-programme' (FINAL) :", nrow(df), "\n")
 
 # 3. Sauvegarde
-saveRDS(df, "df_analysis.rds")
+saveRDS(df, "data/df_analysis.rds")
