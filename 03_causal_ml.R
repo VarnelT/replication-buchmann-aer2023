@@ -27,11 +27,18 @@ df_ml <- df %>%
 cat("Observations pour le ML : ", nrow(df_ml), "\n")
 
 # Création des Matrices (Format requis par grf)
-Y <- df_ml$under_18        # Outcome
-W <- df_ml$anyoil          # Treatment (Incentive)
-X <- df_ml %>% select(all_of(vars_heterogeneity)) %>% as.matrix()
-cluster_ids <- as.numeric(factor(df_ml$CLUSTER)) # Clusters numériques
+# 1. On force Y et W à être de simples vecteurs numériques (On enlève les labels Stata)
+Y <- as.numeric(df_ml$under_18)
+W <- as.numeric(df_ml$anyoil)
 
+# 2. Pour X, on s'assure aussi que c'est une matrice purement numérique
+X <- df_ml %>% 
+  select(all_of(vars_heterogeneity)) %>% 
+  mutate(across(everything(), as.numeric)) %>% # Conversion de sécurité
+  as.matrix()
+
+# 3. Idem pour les clusters
+cluster_ids <- as.numeric(factor(df_ml$CLUSTER))
 # --- 2. ENTRAINEMENT DE LA CAUSAL FOREST ---
 # C'est ici que ça calcule. Ça peut prendre 1-2 minutes.
 cat("\n--- Entraînement de la Causal Forest (2000 arbres) ---\n")
