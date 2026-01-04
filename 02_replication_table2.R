@@ -8,6 +8,13 @@ setwd('/home/onyxia/work/replication-buchmann-aer2023')
 # 1. Chargement des données propres
 df <- readRDS("data/df_analysis.rds")
 
+
+
+
+#------------TABLE1 / SUMMARY STATISTICS---------------------------------------
+
+
+
 # 2. Vérification des variables de contrôle
 # Le papier contrôle pour : age, household size, older sister, school enrollment, mother education, public transport.
 # On vérifie si elles sont présentes (noms standards dans ce dataset)
