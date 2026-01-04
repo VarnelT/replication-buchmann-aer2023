@@ -69,3 +69,4 @@ saveRDS(ml_data, "data/ml_data_stepB.rds")
 
 cat("\n✅ Données ML prêtes et sauvegardées dans 'data/ml_data_stepB.rds'.\n")
 cat("Dimensions de X : ", dim(X_matrix)[1], " lignes x ", dim(X_matrix)[2], " colonnes.\n")
+
