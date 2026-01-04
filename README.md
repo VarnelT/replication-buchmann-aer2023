@@ -21,5 +21,5 @@ Data is sourced from OpenICPSR (Project ID: 192114).
 *Note: Raw data is not included in this repo for size/license reasons. Please download it from the source.*
 
 ### Author
-[Ton Prénom] [Ton Nom]
+Varnel TIENTCHEU
 *ENSAE Paris - IP Paris*
