@@ -17,9 +17,8 @@ This project serves as a research artifact to demonstrate proficiency in applied
 * **Machine Learning:** Causal Forests for CATE estimation.
 
 ### Data
-Data is sourced from OpenICPSR (Project ID: 192114).
-*Note: Raw data is not included in this repo for size/license reasons. Please download it from the source.*
+The raw data is not included in this repository due to size constraints. To replicate the results, please download the files from OpenICPSR (Project ID: 192114) and place them in a data/ folder
 
 ### Author
 Varnel TIENTCHEU
-*ENSAE Paris - IP Paris*
+*ENSAE - IP Paris*
