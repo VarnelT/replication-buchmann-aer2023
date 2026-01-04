@@ -1,6 +1,8 @@
 library(tidyverse)
 library(grf)      # Le package de Susan Athey
 library(fixest)   # Juste pour model.matrix si besoin
+install.packages("grf")
+
 
 # 1. Chargement des données propres
 df <- readRDS("data/df_analysis.rds")

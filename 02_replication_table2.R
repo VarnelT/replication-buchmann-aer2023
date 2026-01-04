@@ -2,6 +2,8 @@ library(tidyverse)
 library(fixest) # Le standard pour l'économétrie en R
 library(glue)
 
+setwd('/home/onyxia/work/replication-buchmann-aer2023')
+
 
 # 1. Chargement des données propres
 df <- readRDS("data/df_analysis.rds")
