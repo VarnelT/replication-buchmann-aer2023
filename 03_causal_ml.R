@@ -82,8 +82,12 @@ print(var_imp[order(var_imp, decreasing = TRUE), , drop = FALSE])
 # Si on voit une cloche étalée, il y a de l'hétérogénéité.
 # Si c'est un pic unique, l'effet est constant.
 cates <- predict(forest)$predictions
-hist(cates, main = "Distribution des Effets du Traitement (CATE)",
+
+# 1. On ouvre le "canvas" (fichier PNG) dans le dossier output
+png("histogramme_cate.png", width = 800, height = 600)
+hist(cates, main = "Distribution des Effets du Traitement (CATEEE)",
      xlab = "Effet estimé (Gain en probabilité de non-mariage)",
      breaks = 30, col = "skyblue")
 abline(v = ate_result["estimate"], col = "red", lwd = 2, lty = 2)
 legend("topright", legend = "ATE Moyen", col = "red", lty = 2)
+dev.off()
