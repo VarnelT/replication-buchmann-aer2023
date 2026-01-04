@@ -42,6 +42,7 @@ covariates_list <- c(
   "bl_mother_schooled"    # Dummy si mère scolarisée
 )
 
+
 # Création du sous-tableau X
 X_raw <- df_ml %>%
   select(all_of(covariates_list))
