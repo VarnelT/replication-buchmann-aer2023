@@ -27,18 +27,18 @@ The analysis is sequential and organized as follows:
     * Creation of treatment indicator variables.
 
 ### 2. Econometric Analysis
-* **`02_replicating_tale.R`**:
+* **`02_replication_table.R`**:
     * Estimation of Linear Probability Models (LPM) with fixed effects.
     * Implementation of `fixest` for high-dimensional fixed effects (Union + Tercile) and clustering (Village).
     * Production of **Table 2** (Main Impact).
 
-* **`03_Comparing_bras.R`**:
+* **`03_Comparative_table_arms.R`**:
     * Generation of descriptive statistics and Balance Check.
     * Comparison of "naïve" means between treatment arms (Control, Incentive, Empowerment).
     * Production of **Table 1** (Randomization validation).
 
 ### 3. Visualization
-* **`04_Vizualising.R`**:
+* **`04_Vizualization.R`**:
     * Production of illustrative charts for the report.
     * Generation of confidence interval plots comparing treatment groups.
 
