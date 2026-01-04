@@ -77,5 +77,5 @@ final_table <- table_data %>%
 print(final_table)
 
 # Sauvegarde HTML (Robuste)
-gtsave(final_table, "output/Table_Comparatif_Bras.html")
+gtsave(final_table, "Tables/Table_Comparatif_Bras.html")
 
