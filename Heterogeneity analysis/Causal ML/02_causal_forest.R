@@ -64,7 +64,7 @@ p <- ggplot(df_results, aes(x = cate)) +
   theme_minimal()
 
 print(p)
-ggsave("Heterogeneity analysis/Causal ML/Causal ML/cate_distribution.png", width = 8, height = 5)
+ggsave("Heterogeneity analysis/Causal ML/cate_distribution.png", width = 8, height = 5)
 
 # --- 6. SAUVEGARDE ---
 saveRDS(forest, "data/causal_forest_model.rds")

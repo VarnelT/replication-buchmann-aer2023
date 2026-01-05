@@ -59,7 +59,7 @@ gt_tbl <- table_profiling %>%
   )
 
 print(gt_tbl)
-gtsave(gt_tbl, "Heterogeneity analysis/Causal ML/Causal ML/Table_Heterogeneity_Profile.html")
+gtsave(gt_tbl, "Heterogeneity analysis/Causal ML/Table_Heterogeneity_Profile.html")
 
 # --- 4. POLICY VALUE FUNCTION (LE CHIFFRE CLÉ) ---
 # Quelle proportion de la population doit-on cibler ?
