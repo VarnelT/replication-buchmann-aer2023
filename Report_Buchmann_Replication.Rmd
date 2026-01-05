@@ -36,3 +36,11 @@ ate_global <- mean(df_policy$cate)
 gate_target <- mean(df_policy$cate[df_policy$target == 1])
 
 efficiency_gain <- (abs(gate_target) - abs(ate_global)) / abs(ate_global) * 100
+```
+
+*R Markdown* permet de mélanger :
+
+- du texte libre mis en forme
+- des blocs de code R
+
+Les blocs de code sont exécutés et leur résultat affiché, par exemple :
