@@ -1,7 +1,7 @@
 ---
 title: "Optimizing Incentives for Child Marriage Prevention"
 subtitle: "Replication and Heterogeneity Analysis of Buchmann et al. (2023)"
-author: "Candidat Assistant Recherche"
+author: "TIENTCHEU Varnel - ENSAE Paris"
 date: "`r Sys.Date()`"
 output: 
   pdf_document:
@@ -38,9 +38,10 @@ gate_target <- mean(df_policy$cate[df_policy$target == 1])
 efficiency_gain <- (abs(gate_target) - abs(ate_global)) / abs(ate_global) * 100
 ```
 
-*R Markdown* permet de mélanger :
+# Résumé exécutif
+Ce rapport présente une reproduction complète et une extension par Machine Learning de l'article "Punt on the most effective intervention? Evidence from a RCT in Bangladesh" (Buchmann et al., 2023).
+Alors que nous avons reproduit avec succès le résultat original — à savoir que les incitations financières réduisent le mariage précoce de r round(abs(ate_global)*100, 1) points de pourcentage (pp) en moyenne — notre analyse d'hétérogénéité révèle que cette moyenne masque des variations significatives.
 
-- du texte libre mis en forme
-- des blocs de code R
+En utilisant des Forêts Causales (Generalized Random Forests), nous avons découvert que l'intervention est inefficace, voire potentiellement contre-productive, pour environ r round(100 - pct_target, 0) % de la population (principalement des filles déjà déscolarisées).
 
-Les blocs de code sont exécutés et leur résultat affiché, par exemple :
+Recommandation Clé : Une règle de politique publique ciblant uniquement les "répondantes prédictives" (predicted responders) ne traiterait que r round(pct_target, 1) % de la population. Cette stratégie augmenterait l'efficacité du programme de r round(efficiency_gain, 1) %, portant l'impact moyen par fille traitée à r round(abs(gate_target)*100, 2) pp.
