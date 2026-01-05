@@ -40,7 +40,7 @@ efficiency_gain <- (abs(gate_target) - abs(ate_global)) / abs(ate_global) * 100
 
 # Résumé exécutif
 Ce rapport présente une reproduction complète et une extension par Machine Learning de l'article "Punt on the most effective intervention? Evidence from a RCT in Bangladesh" (Buchmann et al., 2023).
-Alors que nous avons reproduit avec succès le résultat original — à savoir que les incitations financières réduisent le mariage précoce de r round(abs(ate_global)*100, 1) points de pourcentage (pp) en moyenne — notre analyse d'hétérogénéité révèle que cette moyenne masque des variations significatives.
+Alors que nous avons reproduit avec succès le résultat original — à savoir que les incitations financières réduisent le mariage précoce de ```{r round(abs(ate_global)*100, 1)} points de pourcentage (pp) en moyenne — notre analyse d'hétérogénéité révèle que cette moyenne masque des variations significatives.
 
 En utilisant des Forêts Causales (Generalized Random Forests), nous avons découvert que l'intervention est inefficace, voire potentiellement contre-productive, pour environ r round(100 - pct_target, 0) % de la population (principalement des filles déjà déscolarisées).
 
