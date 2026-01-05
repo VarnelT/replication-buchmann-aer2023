@@ -113,7 +113,7 @@ table_output <- final_tab_ordered %>%
 
 # Affichage
 print(table_output)
-gtsave(table_output, "Tables/Table1_SummaryStatistics_Replication.html")
+gtsave(table_output, "Replicating Results/Tables/Table1_SummaryStatistics_Replication.html")
 
 
 
@@ -221,4 +221,4 @@ table_gt <- modelsummary(
 print(table_gt)
 
 # Sauvegarde HTML (Sécurité)
-gtsave(table_gt, "Tables/Table2_Replication.html")
+gtsave(table_gt, "Replicating Results/Tables/Table2_Replication.html")
