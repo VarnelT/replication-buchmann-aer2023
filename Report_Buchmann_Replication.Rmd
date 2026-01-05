@@ -1,0 +1,38 @@
+---
+title: "Optimizing Incentives for Child Marriage Prevention"
+subtitle: "Replication and Heterogeneity Analysis of Buchmann et al. (2023)"
+author: "Candidat Assistant Recherche"
+date: "`r Sys.Date()`"
+output: 
+  pdf_document:
+    toc: true
+    number_sections: true
+    highlight: tango
+---
+
+```{r setup, include=FALSE}
+# Configuration globale
+knitr::opts_chunk$set(echo = FALSE, warning = FALSE, message = FALSE, fig.align = "center")
+
+# Chargement des librairies nécessaires pour le rapport
+library(tidyverse)
+library(knitr)
+library(gt)
+
+# Chargement des données générées par nos scripts (Step B)
+# On charge les résultats CATE pour calculer les chiffres clés dans le texte
+df_results <- readRDS("data/df_cate_results.rds")
+
+# Calculs dynamiques pour le texte (Policy Value)
+# 1. Règle de décision : CATE < 0
+df_policy <- df_results %>%
+  mutate(target = if_else(cate < 0, 1, 0))
+
+# 2. Chiffres clés
+n_total <- nrow(df_policy)
+pct_target <- mean(df_policy$target) * 100
+
+ate_global <- mean(df_policy$cate)
+gate_target <- mean(df_policy$cate[df_policy$target == 1])
+
+efficiency_gain <- (abs(gate_target) - abs(ate_global)) / abs(ate_global) * 100
