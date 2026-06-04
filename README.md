@@ -28,7 +28,7 @@ Download the data files and place them in a `data/` directory at the project roo
 
 ## Methodology
 
-### Step A — Replication (`Replicating Results/`)
+### Step A — Replication (`src/replication/`)
 
 | Script | Purpose |
 |---|---|
@@ -39,7 +39,7 @@ Download the data files and place them in a `data/` directory at the project roo
 
 **Identification strategy:** Intention-to-Treat (ITT) exploiting random assignment across villages. Robustness checks include Difference-in-Differences specifications and heteroskedasticity-robust standard errors.
 
-### Step B — Causal ML Extension (`Heterogeneity analysis/Causal ML/`)
+### Step B — Causal ML Extension (`src/heterogeneity-analysis/`)
 
 | Script | Purpose |
 |---|---|
@@ -80,7 +80,11 @@ A Causal Forest trained on 3,000 trees reveals significant heterogeneity masked 
 # 2. Download data from OpenICPSR (Project ID: 192114) and place in data/
 
 # 3. Install required R packages
-install.packages(c("haven", "tidyverse", "estimatr", "grf", "modelsummary"))
+install.packages(c(
+  "haven", "tidyverse", "estimatr", "fixest",
+  "modelsummary", "gt", "glue", "scales",
+  "grf", "caret"
+))
 
 # 4. Step A — run replication scripts in order
 source("src/replication/01_load_data.R")
