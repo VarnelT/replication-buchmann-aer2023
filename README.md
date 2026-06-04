@@ -32,10 +32,10 @@ Download the data files and place them in a `data/` directory at the project roo
 
 | Script | Purpose |
 |---|---|
-| `01_load_data.R` | Import and clean the OpenICPSR data release |
-| `02_replication_table2.R` | Reproduce Table 2 (ITT estimates on child marriage) via OLS/IV |
-| `04_comparative_table_arms.R` | Compare treatment arms (Incentive vs. Empowerment vs. Control) |
-| `04_visualization.R` | Reproduce key figures from the paper |
+| `src/replication/01_load_data.R` | Import and clean the OpenICPSR data release |
+| `src/replication/02_replication_table2.R` | Reproduce Table 2 (ITT estimates on child marriage) via OLS/IV |
+| `src/replication/04_comparative_table_arms.R` | Compare treatment arms (Incentive vs. Empowerment vs. Control) |
+| `src/replication/04_visualization.R` | Reproduce key figures from the paper |
 
 **Identification strategy:** Intention-to-Treat (ITT) exploiting random assignment across villages. Robustness checks include Difference-in-Differences specifications and heteroskedasticity-robust standard errors.
 
@@ -43,9 +43,9 @@ Download the data files and place them in a `data/` directory at the project roo
 
 | Script | Purpose |
 |---|---|
-| `01_ml_prep.R` | Sub-sample to Incentive vs. Control arms; construct baseline covariate matrix |
-| `02_causal_forest.R` | Train a Causal Forest (GRF, 3,000 trees) to estimate individual-level CATEs |
-| `03_policy_analysis.R` | Derive optimal targeting rule; compute efficiency gain vs. universal rollout |
+| `src/heterogeneity-analysis/01_ml_prep.R` | Sub-sample to Incentive vs. Control arms; construct baseline covariate matrix |
+| `src/heterogeneity-analysis/02_causal_forest.R` | Train a Causal Forest (GRF, 3,000 trees) to estimate individual-level CATEs |
+| `src/heterogeneity-analysis/03_policy_analysis.R` | Derive optimal targeting rule; compute efficiency gain vs. universal rollout |
 
 **Method:** Generalized Random Forests (Athey, Tibshirani & Wager, 2019) with honest estimation. Unconfoundedness is guaranteed by the RCT design. Missing covariates are mean-imputed prior to tree fitting.
 
@@ -69,7 +69,7 @@ A Causal Forest trained on 3,000 trees reveals significant heterogeneity masked 
 
 **Key insight:** Responders are predominantly girls currently enrolled in school at baseline. Targeting this subgroup would increase program impact per treated individual by **45%** relative to a universal rollout.
 
-![CATE Distribution](Heterogeneity%20analysis/Causal%20ML/cate_distribution.png)
+![CATE Distribution](results/cate_distribution.png)
 
 ## Replication
 
@@ -83,17 +83,15 @@ A Causal Forest trained on 3,000 trees reveals significant heterogeneity masked 
 install.packages(c("haven", "tidyverse", "estimatr", "grf", "modelsummary"))
 
 # 4. Step A — run replication scripts in order
-setwd("Replicating Results/")
-source("01_load_data.R")
-source("02_replication_table2.R")
-source("04_comparative_table_arms.R")
-source("04_visualization.R")
+source("src/replication/01_load_data.R")
+source("src/replication/02_replication_table2.R")
+source("src/replication/04_comparative_table_arms.R")
+source("src/replication/04_visualization.R")
 
 # 5. Step B — run Causal ML scripts in order
-setwd("../Heterogeneity analysis/Causal ML/")
-source("01_ml_prep.R")
-source("02_causal_forest.R")
-source("03_policy_analysis.R")
+source("src/heterogeneity-analysis/01_ml_prep.R")
+source("src/heterogeneity-analysis/02_causal_forest.R")
+source("src/heterogeneity-analysis/03_policy_analysis.R")
 ```
 
 ## References

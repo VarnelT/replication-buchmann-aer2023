@@ -82,4 +82,4 @@ p <- ggplot(plot_data, aes(x = treatment_group, y = mean_rate, fill = treatment_
 print(p)
 
 # Sauvegarde HD
-ggsave("Figure1_Impact_Graph.png", plot = p, width = 8, height = 6, dpi = 300)
+ggsave("results/Figure1_Impact_Graph.png", plot = p, width = 8, height = 6, dpi = 300)
